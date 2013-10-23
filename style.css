@@ -1,0 +1,28 @@
+ul#icon-list {
+  display: table;
+}
+ul#icon-list li {
+  display: table-cell;
+  float:left;
+  width:200px;
+  height:80px;
+  text-align: center;
+}
+ul#icon-list li img {
+  display: block;
+  clear: both;
+  margin:10px auto;
+}
+
+body {
+  margin-top:50px;
+}
+#searchbox {
+position: absolute;
+top:5px;
+right: 25%;
+width: 50%;
+border: 1px solid #666;
+background: #eee;
+height:40px;
+}
