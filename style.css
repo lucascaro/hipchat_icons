@@ -4,8 +4,8 @@ ul#icon-list {
 ul#icon-list li {
   display: table-cell;
   float:left;
-  width:200px;
-  height:80px;
+  width:120px;
+  height:70px;
   text-align: center;
 }
 ul#icon-list li img {
