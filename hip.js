@@ -66,13 +66,13 @@ console.log('hip2');
   }
   function parseIconResponse(data) {
     console.log(data);
-    $('#icon-' + data.id).append($('<img src="' + data.url.replace('/emoticons','/emoticons/') + '"/>'))
+    $('#icon-' + data.id).prepend($('<img src="' + data.url.replace('/emoticons','/emoticons/') + '"/>'))
   }
   function allSet() {
     console.log(icons.length);
     console.log(icons);
     for (i in icons) {
-      var $li = $('<li id="icon-' + icons[i].id + '" class="icon icon-name-' + icons[i].shortcut + '">' + icons[i].id + ' - (' + icons[i].shortcut + ')</li>');
+      var $li = $('<li id="icon-' + icons[i].id + '" class="icon icon-name-' + icons[i].shortcut + '">(' + icons[i].shortcut + ')</li>');
       (function(i) {
         $li.click(function() {
             window.prompt ("Copy to clipboard: Ctrl+C, Enter", '(' + icons[i].shortcut + ')');

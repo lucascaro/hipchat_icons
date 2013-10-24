@@ -2,7 +2,7 @@
   $.fn.addSearch = function (options) {
     // $.extend(options, defaults);
     var $searchBox = $('<input type="text" id="searchbox" />').appendTo('body');
-    $searchBox.keyup(function() {
+    $searchBox.bind('change keyup',function() {
       console.log($(this.value));
       if (this.value) {
         $('.icon').not('[class*="' + this.value + '"]').hide();
