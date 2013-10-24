@@ -10,6 +10,10 @@
       } else {
         $('.icon').show();
       }
-    });
+    })
+    .bind('blur, focusout', function(e){
+      window.setTimeout(function() {$(e.target).focus()}, 100);
+    })
+    .focus();
   };
 }(jQuery));
