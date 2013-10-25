@@ -8,6 +8,11 @@ ul#icon-list li {
   height:70px;
   text-align: center;
 }
+ul#icon-list li.divider {
+  width:100%;
+  clear:both;
+  height:10px;
+}
 ul#icon-list li img {
   display: block;
   clear: both;
@@ -18,11 +23,11 @@ body {
   margin-top:50px;
 }
 #searchbox {
-position: absolute;
-top:5px;
-right: 25%;
-width: 50%;
-border: 1px solid #666;
-background: #eee;
-height:40px;
+  position: fixed;
+  top:5px;
+  right: 25%;
+  width: 50%;
+  border: 1px solid #666;
+  background: #eee;
+  height:40px;
 }

@@ -2,8 +2,7 @@
   $.fn.addSearch = function (options) {
     // $.extend(options, defaults);
     var $searchBox = $('<input type="text" id="searchbox" />').appendTo('body');
-    $searchBox.bind('change keyup',function() {
-      console.log($(this.value));
+    $searchBox.bind('change, keyup',function() {
       if (this.value) {
         $('.icon').not('[class*="' + this.value + '"]').hide();
         $('.icon[class*="' + this.value + '"]').show();
@@ -12,7 +11,9 @@
       }
     })
     .bind('blur, focusout', function(e){
-      window.setTimeout(function() {$(e.target).focus()}, 100);
+      window.setTimeout(function() {
+        $searchBox.focus();
+      }, 200);
     })
     .focus();
   };

@@ -29,7 +29,7 @@ var localCache = {
 localCache.data = JSON.parse(localStorage.localCacheData);
 console.log('hip');
 jQuery(function($) {
-console.log('hip2');
+  console.log('hip2');
   var $body = $('body');
   var $ulist = $('<ul id="icon-list"></ul>');
   $ulist.appendTo($body);
@@ -57,8 +57,17 @@ console.log('hip2');
     token = localCache.get('api_token');
     api_base = 'https://api.hipchat.com/v2/';
     var icons = [];
-    var first = api_base + 'emoticon?auth_token=' + token;
-    function getNext(next) {
+    var first = api_base + 'emoticon';
+    var npieces = 2;
+    function getNext(base, type) {
+      if (type == undefined) {
+        type = 'all';
+      }
+      var next = base;
+      if (base.indexOf('auth_token=') <= 0) {
+        next = base + (base.indexOf('?') > 0 ? '&' : '?') + 'type=' + type + '&auth_token=' + token;
+      }
+      console.log(next);
       $.ajax({
         url: next,
         cache: true,
@@ -72,7 +81,7 @@ console.log('hip2');
         complete: function (jqXHR) {
           if(jqXHR.status == 200) {
             localCache.set(next,jqXHR.responseJSON);
-            parseResponse(jqXHR.responseJSON);
+            parseResponse(jqXHR.responseJSON, type);
           } else {
             console.log(jqXHR);
             if (jqXHR.status == 401) {
@@ -82,7 +91,7 @@ console.log('hip2');
               location.reload();
             }
             if (localCache.exist(next)) {
-              parseResponse(localCache.get(next));
+              parseResponse(localCache.get(next), type);
               return false;
             }
           }
@@ -90,31 +99,42 @@ console.log('hip2');
       });
     }
 
-    function parseResponse(data) {
+    function parseResponse(data, type) {
       console.log(data);
-        icons = icons.concat(data.items);
-        if (data.links.next != undefined) {
-          next = data.links.next + "&auth_token=" + token;
-          getNext(next);
-        } else {
-          // We got them all.
-          allSet();
-        }
+      icons = icons.concat(data.items);
+      if (data.links.next != undefined && data.items.length > 0) {
+        console.log(data.links.next);
+        next = data.links.next + "&auth_token=" + token;
+        getNext(next);
+      } else {
+        // We got them all.
+        allSet();
+      }
     }
-    function parseIconResponse(data) {
+    function parseIconResponse(data, i) {
       console.log(data);
       $('#icon-' + data.id).prepend($('<img src="' + data.url.replace('/emoticons','/emoticons/') + '"/>'))
+      if (i == icons.length - 1) {
+        // last icon
+        icons = [];
+        npieces -= 1;
+        if (npieces > 0) {
+          $ulist.append('<li class="divider"><hr style="clear:both;" /></li>');
+          getNext(first, 'group');
+        } else {
+          $ulist.addSearch();
+        }
+      }
     }
     function allSet() {
       console.log(icons.length);
       console.log(icons);
       for (i in icons) {
         var $li = $('<li id="icon-' + icons[i].id + '" class="icon icon-name-' + icons[i].shortcut + '">(' + icons[i].shortcut + ')</li>');
-        (function(i) {
+        (function(i, icons) {
           $li.click(function() {
               window.prompt ("Copy to clipboard: Ctrl+C, Enter", '(' + icons[i].shortcut + ')');
           });
-        }(i));
         var thisUrl = icons[i].links.self + "?auth_token=" + token;
         $li.appendTo($ulist);
         $.ajax({
@@ -122,7 +142,7 @@ console.log('hip2');
           cache: true,
           beforeSend: function() {
             if (localCache.exist(this.url)) {
-              parseIconResponse(localCache.get(this.url));
+              parseIconResponse(localCache.get(this.url), i);
               return false;
             }
             return true;
@@ -130,14 +150,15 @@ console.log('hip2');
           complete: function(jqXHR) {
             if(jqXHR.status == 200) {
               localCache.set(this.url,jqXHR.responseJSON);
-              parseIconResponse(jqXHR.responseJSON);
+              parseIconResponse(jqXHR.responseJSON, i);
             }
           }
         });
+        }(i, icons));
       }
-      $ulist.addSearch();
     }
-    getNext(first);
+    getNext(first, 'global');
+
     $body.append(
       $('<a href="#">clear token</a>').click(function(){
         localCache.remove('api_token');
