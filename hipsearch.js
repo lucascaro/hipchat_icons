@@ -15,6 +15,13 @@
         $searchBox.focus();
       }, 200);
     })
+    .bind('keyup', function(e){
+      if (e.which == 27) {
+        // Clear the search box when the user has pressed the escape key.
+        this.value='';
+        $('.icon').show();
+      }
+    })
     .focus();
   };
 }(jQuery));
