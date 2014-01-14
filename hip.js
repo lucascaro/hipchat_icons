@@ -113,7 +113,7 @@ jQuery(function($) {
     }
     function parseIconResponse(data, i) {
       console.log(data);
-      $('#icon-' + data.id).prepend($('<img src="' + data.url.replace('/emoticons','/emoticons/') + '"/>'))
+      $('#icon-' + data.id).prepend($('<img src="' + data.url/*.replace('/emoticons','/emoticons/')*/ + '"/>'))
       if (i == icons.length - 1) {
         // last icon
         icons = [];
