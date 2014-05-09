@@ -26,7 +26,9 @@ var localCache = {
       return url.replace(/auth_token=(.*)$/, '');
     }
 };
-localCache.data = JSON.parse(localStorage.localCacheData);
+if (localStorage.localCacheData !== undefined) {
+  localCache.data = JSON.parse(localStorage.localCacheData);
+}
 console.log('hip');
 jQuery(function($) {
   console.log('hip2');
